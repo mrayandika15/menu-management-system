@@ -16,12 +16,11 @@ datasource db {
 
 // Menu model - represents a restaurant menu
 model Menu {
-  id          String   @id @default(cuid())
-  name        String   @db.VarChar(255)
-  description String?  @db.Text
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  name      String   @db.VarChar(255)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relations
   menuItems MenuItem[]

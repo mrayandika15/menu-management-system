@@ -1,19 +1,12 @@
-import { IsString, IsNotEmpty, IsOptional, IsBoolean, MaxLength } from 'class-validator'
-import { Transform } from 'class-transformer'
+import { IsString, IsNotEmpty, IsOptional, IsBoolean, Length } from 'class-validator'
 
 export class CreateMenuDto {
   @IsString()
-  @IsNotEmpty()
-  @MaxLength(255)
-  @Transform(({ value }) => value?.trim())
+  @IsNotEmpty({ message: 'Menu name is required' })
+  @Length(1, 100, { message: 'Menu name must be between 1 and 100 characters' })
   name!: string
 
-  @IsString()
   @IsOptional()
-  @Transform(({ value }) => value?.trim())
-  description?: string
-
-  @IsBoolean()
-  @IsOptional()
-  isActive?: boolean = true
+  @IsBoolean({ message: 'isActive must be a boolean value' })
+  isActive?: boolean
 }

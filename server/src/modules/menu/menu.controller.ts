@@ -1,60 +1,89 @@
-import { 
-  Controller, 
-  Get, 
-  Post, 
-  Body, 
-  Patch, 
-  Param, 
-  Delete, 
-  Query, 
-  HttpCode, 
-  HttpStatus
-} from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, HttpCode, HttpStatus } from '@nestjs/common'
 import { MenuService } from './menu.service'
 import { CreateMenuDto, UpdateMenuDto, MenuResponseDto } from './dto'
 
-@Controller('api/menus')
+@Controller('menus')
 export class MenuController {
   constructor(private readonly menuService: MenuService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() createMenuDto: CreateMenuDto): Promise<MenuResponseDto> {
-    return await this.menuService.create(createMenuDto)
+  async create(@Body() createMenuDto: CreateMenuDto): Promise<{
+    data: MenuResponseDto
+    message: string
+    error: null
+  }> {
+    const menu = await this.menuService.create(createMenuDto)
+    return {
+      data: menu,
+      message: 'Menu created successfully',
+      error: null
+    }
   }
 
   @Get()
-  @HttpCode(HttpStatus.OK)
-  async findAll(@Query('isActive') isActive?: string): Promise<MenuResponseDto[]> {
-    const isActiveBoolean = isActive === 'true' ? true : isActive === 'false' ? false : undefined
-    return await this.menuService.findAll(isActiveBoolean)
+  async findAll(@Query('isActive') isActive?: string): Promise<{
+    data: MenuResponseDto[]
+    message: string
+    error: null
+  }> {
+    const isActiveFilter = isActive !== undefined ? isActive === 'true' : undefined
+    const menus = await this.menuService.findAll(isActiveFilter)
+    return {
+      data: menus,
+      message: 'Menus retrieved successfully',
+      error: null
+    }
   }
 
   @Get(':id')
-  @HttpCode(HttpStatus.OK)
-  async findOne(@Param('id') id: string): Promise<MenuResponseDto> {
-    return await this.menuService.findOne(id)
+  async findOne(@Param('id') id: string): Promise<{
+    data: MenuResponseDto
+    message: string
+    error: null
+  }> {
+    const menu = await this.menuService.findOne(id)
+    return {
+      data: menu,
+      message: 'Menu retrieved successfully',
+      error: null
+    }
   }
 
   @Patch(':id')
-  @HttpCode(HttpStatus.OK)
   async update(
-    @Param('id') id: string, 
+    @Param('id') id: string,
     @Body() updateMenuDto: UpdateMenuDto
-  ): Promise<MenuResponseDto> {
-    return await this.menuService.update(id, updateMenuDto)
+  ): Promise<{
+    data: MenuResponseDto
+    message: string
+    error: null
+  }> {
+    const menu = await this.menuService.update(id, updateMenuDto)
+    return {
+      data: menu,
+      message: 'Menu updated successfully',
+      error: null
+    }
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.OK)
-  async remove(@Param('id') id: string): Promise<{ message: string }> {
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async remove(@Param('id') id: string): Promise<void> {
     await this.menuService.remove(id)
-    return { message: 'Menu deleted successfully' }
   }
 
   @Patch(':id/toggle-active')
-  @HttpCode(HttpStatus.OK)
-  async toggleActive(@Param('id') id: string): Promise<MenuResponseDto> {
-    return await this.menuService.toggleActive(id)
+  async toggleActive(@Param('id') id: string): Promise<{
+    data: MenuResponseDto
+    message: string
+    error: null
+  }> {
+    const menu = await this.menuService.toggleActive(id)
+    return {
+      data: menu,
+      message: 'Menu status toggled successfully',
+      error: null
+    }
   }
 }

@@ -21,7 +21,6 @@ export class MenuService {
       const menu = await this.prisma.menu.create({
         data: {
           name: createMenuDto.name,
-          description: createMenuDto.description,
           isActive: createMenuDto.isActive ?? true
         }
       })
@@ -96,7 +95,6 @@ export class MenuService {
         where: { id },
         data: {
           ...(updateMenuDto.name && { name: updateMenuDto.name }),
-          ...(updateMenuDto.description !== undefined && { description: updateMenuDto.description }),
           ...(updateMenuDto.isActive !== undefined && { isActive: updateMenuDto.isActive })
         }
       })
@@ -165,7 +163,6 @@ export class MenuService {
     const responseDto = new MenuResponseDto()
     responseDto.id = menu.id
     responseDto.name = menu.name
-    responseDto.description = menu.description
     responseDto.isActive = menu.isActive
     responseDto.createdAt = menu.createdAt
     responseDto.updatedAt = menu.updatedAt
