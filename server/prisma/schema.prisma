@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Menu model - represents a restaurant menu
+model Menu {
+  id          String   @id @default(cuid())
+  name        String   @db.VarChar(255)
+  description String?  @db.Text
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  menuItems MenuItem[]
+
+  @@map("menus")
+  @@index([isActive])
+  @@index([createdAt])
+}
+
+// MenuItem model - represents items within a menu
+model MenuItem {
+  id          String   @id @default(cuid())
+  name        String   @db.VarChar(255)
+  description String?  @db.Text
+  price       Decimal  @db.Decimal(10, 2)
+  category    String   @db.VarChar(100)
+  isAvailable Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Foreign keys
+  menuId   String
+  parentId String?
+
+  // Relations
+  menu     Menu        @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  parent   MenuItem?   @relation("MenuItemHierarchy", fields: [parentId], references: [id])
+  children MenuItem[]  @relation("MenuItemHierarchy")
+
+  @@map("menu_items")
+  @@index([menuId])
+  @@index([parentId])
+  @@index([category])
+  @@index([isAvailable])
+  @@index([sortOrder])
+}

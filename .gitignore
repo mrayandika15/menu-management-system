@@ -1,6 +1,7 @@
 # Project Specification and Configuration Files
-.spec/
 .trae/
+.env
+.spec
 
 # Dependencies
 node_modules/
