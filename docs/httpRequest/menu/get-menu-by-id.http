@@ -1,0 +1,11 @@
+# Get Menu by ID
+# GET /api/menus/:id
+# Retrieves a specific menu item by its ID
+
+# Get menu by ID (replace with actual menu ID)
+GET http://localhost:3001/api/menus/cmg17j65f00012z74c6mto9rt
+
+###
+
+# Example with different ID format
+GET http://localhost:3001/api/menus/1

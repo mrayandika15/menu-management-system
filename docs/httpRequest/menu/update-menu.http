@@ -1,0 +1,47 @@
+# Update Menu
+# PATCH /api/menus/:id
+# Updates an existing menu item (partial update)
+
+# Update menu name and price
+PATCH http://localhost:3001/api/menus/cm5xxxxxxxxxxxxxxxxx
+Content-Type: application/json
+
+{
+  "name": "Nasi Goreng Spesial Premium",
+  "price": 30000
+}
+
+###
+
+# Update only description
+PATCH http://localhost:3001/api/menus/cm5xxxxxxxxxxxxxxxxx
+Content-Type: application/json
+
+{
+  "description": "Nasi goreng dengan telur, ayam, udang, dan sayuran segar pilihan"
+}
+
+###
+
+# Update category and status
+PATCH http://localhost:3001/api/menus/cm5xxxxxxxxxxxxxxxxx
+Content-Type: application/json
+
+{
+  "category": "Premium Main Course",
+  "isActive": false
+}
+
+###
+
+# Update all fields
+PATCH http://localhost:3001/api/menus/cm5xxxxxxxxxxxxxxxxx
+Content-Type: application/json
+
+{
+  "name": "Nasi Goreng Seafood Deluxe",
+  "description": "Nasi goreng dengan seafood premium dan bumbu rahasia",
+  "price": 45000,
+  "category": "Seafood",
+  "isActive": true
+}

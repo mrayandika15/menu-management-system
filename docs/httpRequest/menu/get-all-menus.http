@@ -1,0 +1,16 @@
+# Get All Menus
+# GET /api/menus
+# Retrieves all menu items with optional filtering
+
+# Get all menus (no filter)
+GET http://localhost:3001/api/menus
+
+###
+
+# Get only active menus
+GET http://localhost:3001/api/menus?isActive=true
+
+###
+
+# Get only inactive menus
+GET http://localhost:3001/api/menus?isActive=false

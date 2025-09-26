@@ -1,0 +1,35 @@
+# Create Menu
+# POST /api/menus
+# Creates a new menu item
+
+POST http://localhost:3001/api/menus
+Content-Type: application/json
+
+{
+  "name": "Nasi Goreng Spesial",
+  "description": "Nasi goreng dengan telur, ayam, dan sayuran segar",
+  "isActive": true
+}
+
+###
+
+# Alternative example with different menu item
+POST http://localhost:3001/api/menus
+Content-Type: application/json
+
+{
+  "name": "Es Teh Manis",
+  "description": "Teh manis dingin yang menyegarkan",
+  "isActive": true
+}
+
+###
+
+# Example with minimal required fields
+POST http://localhost:3001/api/menus
+Content-Type: application/json
+
+{
+  "name": "Gado-gado",
+  "category": "Salad"
+}

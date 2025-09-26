@@ -1,0 +1,11 @@
+# Toggle Menu Active Status
+# PATCH /api/menus/:id/toggle-active
+# Toggles the active status of a menu item (active -> inactive or inactive -> active)
+
+# Toggle menu active status (replace with actual menu ID)
+PATCH http://localhost:3001/api/menus/cm5xxxxxxxxxxxxxxxxx/toggle-active
+
+###
+
+# Example with different ID format
+PATCH http://localhost:3001/api/menus/1/toggle-active

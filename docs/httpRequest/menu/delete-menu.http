@@ -1,0 +1,11 @@
+# Delete Menu
+# DELETE /api/menus/:id
+# Deletes a specific menu item by its ID
+
+# Delete menu by ID (replace with actual menu ID)
+DELETE http://localhost:3001/api/menus/cm5xxxxxxxxxxxxxxxxx
+
+###
+
+# Example with different ID format
+DELETE http://localhost:3001/api/menus/1
