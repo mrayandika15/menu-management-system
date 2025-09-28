@@ -1,0 +1,30 @@
+# Delete Menu Item
+# DELETE /api/menu-items/:id
+# Deletes a menu item and all its children (cascade delete)
+
+# Delete a leaf menu item (no children)
+DELETE http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx
+
+###
+
+# Delete a parent menu item (will cascade delete all children)
+# WARNING: This will delete the item and ALL its descendants
+DELETE http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx
+
+###
+
+# Delete a root menu item (will cascade delete entire subtree)
+# WARNING: This will delete the entire category and all nested items
+DELETE http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx
+
+###
+
+# Example: Delete specific menu item by ID
+# Replace with actual menu item ID from your database
+DELETE http://localhost:3001/api/menu-items/cm5abc123def456ghi789
+
+###
+
+# Example: Delete another menu item
+# Replace with actual menu item ID from your database
+DELETE http://localhost:3001/api/menu-items/cm5xyz789abc123def456

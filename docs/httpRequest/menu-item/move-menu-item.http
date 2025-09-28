@@ -1,0 +1,64 @@
+# Move Menu Item
+# PATCH /api/menu-items/:id/move
+# Moves and reorders menu items in hierarchy
+
+# Move item to different parent and set specific order
+PATCH http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx/move
+Content-Type: application/json
+
+{
+  "targetParentId": "cm5xxxxxxxxxxxxxxxxx",
+  "newOrder": 0
+}
+
+###
+
+# Move item to root level (no parent) with specific order
+PATCH http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx/move
+Content-Type: application/json
+
+{
+  "targetParentId": null,
+  "newOrder": 1
+}
+
+###
+
+# Reorder item within same parent (change order only)
+PATCH http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx/move
+Content-Type: application/json
+
+{
+  "newOrder": 3
+}
+
+###
+
+# Move item to different parent (order will be auto-assigned)
+PATCH http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx/move
+Content-Type: application/json
+
+{
+  "targetParentId": "cm5xxxxxxxxxxxxxxxxx"
+}
+
+###
+
+# Move item to end of current parent's children
+PATCH http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx/move
+Content-Type: application/json
+
+{
+  "newOrder": 999
+}
+
+###
+
+# Move item to beginning of different parent's children
+PATCH http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx/move
+Content-Type: application/json
+
+{
+  "targetParentId": "cm5xxxxxxxxxxxxxxxxx",
+  "newOrder": 0
+}

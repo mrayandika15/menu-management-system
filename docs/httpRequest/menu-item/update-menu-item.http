@@ -1,0 +1,63 @@
+# Update Menu Item
+# PATCH /api/menu-items/:id
+# Updates an existing menu item (partial update)
+
+# Update menu item name only
+PATCH http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx
+Content-Type: application/json
+
+{
+  "name": "Premium Appetizers"
+}
+
+###
+
+# Update menu item status
+PATCH http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx
+Content-Type: application/json
+
+{
+  "isActive": false
+}
+
+###
+
+# Update menu item parent (move to different parent)
+PATCH http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx
+Content-Type: application/json
+
+{
+  "parentId": "cm5xxxxxxxxxxxxxxxxx"
+}
+
+###
+
+# Move item to root level (remove parent)
+PATCH http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx
+Content-Type: application/json
+
+{
+  "parentId": null
+}
+
+###
+
+# Update multiple fields
+PATCH http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx
+Content-Type: application/json
+
+{
+  "name": "Signature Appetizers",
+  "isActive": true
+}
+
+###
+
+# Update name and change parent
+PATCH http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx
+Content-Type: application/json
+
+{
+  "name": "Special Spring Rolls",
+  "parentId": "cm5xxxxxxxxxxxxxxxxx"
+}

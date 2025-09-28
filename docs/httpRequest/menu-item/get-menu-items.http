@@ -1,0 +1,45 @@
+# Get Menu Items
+# Various endpoints to retrieve menu items with hierarchical queries
+
+# Get all menu items by menu ID
+GET http://localhost:3001/api/menu-items/menu/cm5xxxxxxxxxxxxxxxxx
+
+###
+
+# Get only root menu items (no parent)
+GET http://localhost:3001/api/menu-items/menu/cm5xxxxxxxxxxxxxxxxx/root
+
+###
+
+# Get menu items by specific depth level
+GET http://localhost:3001/api/menu-items/menu/cm5xxxxxxxxxxxxxxxxx/depth/0
+
+###
+
+# Get menu items at depth level 1
+GET http://localhost:3001/api/menu-items/menu/cm5xxxxxxxxxxxxxxxxx/depth/1
+
+###
+
+# Get menu items at depth level 2
+GET http://localhost:3001/api/menu-items/menu/cm5xxxxxxxxxxxxxxxxx/depth/2
+
+###
+
+# Get single menu item by ID
+GET http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx
+
+###
+
+# Get ancestors of a menu item (parent hierarchy)
+GET http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx/ancestors
+
+###
+
+# Get descendants of a menu item (children hierarchy)
+GET http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx/descendants
+
+###
+
+# Get siblings of a menu item (same parent level)
+GET http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx/siblings

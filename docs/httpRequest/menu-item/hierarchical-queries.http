@@ -1,0 +1,62 @@
+# Hierarchical Queries for Menu Items
+# Advanced queries for working with menu item hierarchy
+
+# Get complete menu structure (all items with hierarchy)
+GET http://localhost:3001/api/menu-items/menu/cm5xxxxxxxxxxxxxxxxx
+
+###
+
+# Get only root level categories
+GET http://localhost:3001/api/menu-items/menu/cm5xxxxxxxxxxxxxxxxx/root
+
+###
+
+# Get items at specific depth levels
+# Depth 0 = Root items
+GET http://localhost:3001/api/menu-items/menu/cm5xxxxxxxxxxxxxxxxx/depth/0
+
+###
+
+# Depth 1 = First level children
+GET http://localhost:3001/api/menu-items/menu/cm5xxxxxxxxxxxxxxxxx/depth/1
+
+###
+
+# Depth 2 = Second level children (grandchildren)
+GET http://localhost:3001/api/menu-items/menu/cm5xxxxxxxxxxxxxxxxx/depth/2
+
+###
+
+# Get full ancestry path of a specific item
+GET http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx/ancestors
+
+###
+
+# Get all descendants (children, grandchildren, etc.) of an item
+GET http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx/descendants
+
+###
+
+# Get siblings (items with same parent) of an item
+GET http://localhost:3001/api/menu-items/cm5xxxxxxxxxxxxxxxxx/siblings
+
+###
+
+# Example with real menu structure:
+# 1. First get a menu ID
+GET http://localhost:3001/api/menus
+
+###
+
+# 2. Then get root items for that menu
+# GET http://localhost:3001/api/menu-items/menu/{MENU_ID}/root
+
+###
+
+# 3. Get details of a specific item
+# GET http://localhost:3001/api/menu-items/{ITEM_ID}
+
+###
+
+# 4. Explore its hierarchy
+# GET http://localhost:3001/api/menu-items/{ITEM_ID}/descendants

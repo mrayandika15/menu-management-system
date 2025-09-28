@@ -1,0 +1,64 @@
+# Create Menu Item
+# POST /api/menu-items
+# Creates a new menu item in hierarchical structure
+
+# Create root menu item (no parent)
+POST http://localhost:3001/api/menu-items
+Content-Type: application/json
+
+{
+  "name": "Appetizers",
+  "menuId": "cm5xxxxxxxxxxxxxxxxx",
+  "isActive": true
+}
+
+###
+
+# Create child menu item under a parent
+POST http://localhost:3001/api/menu-items
+Content-Type: application/json
+
+{
+  "name": "Spring Rolls",
+  "parentId": "cm5xxxxxxxxxxxxxxxxx",
+  "menuId": "cm5xxxxxxxxxxxxxxxxx",
+  "isActive": true
+}
+
+###
+
+# Create another root category
+POST http://localhost:3001/api/menu-items
+Content-Type: application/json
+
+{
+  "name": "Main Courses",
+  "menuId": "cm5xxxxxxxxxxxxxxxxx",
+  "isActive": true
+}
+
+###
+
+# Create nested menu item (grandchild)
+POST http://localhost:3001/api/menu-items
+Content-Type: application/json
+
+{
+  "name": "Vegetarian Spring Rolls",
+  "parentId": "cm5xxxxxxxxxxxxxxxxx",
+  "menuId": "cm5xxxxxxxxxxxxxxxxx",
+  "isActive": true
+}
+
+###
+
+# Create inactive menu item
+POST http://localhost:3001/api/menu-items
+Content-Type: application/json
+
+{
+  "name": "Seasonal Special",
+  "parentId": "cm5xxxxxxxxxxxxxxxxx",
+  "menuId": "cm5xxxxxxxxxxxxxxxxx",
+  "isActive": false
+}

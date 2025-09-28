@@ -30,31 +30,31 @@ model Menu {
   @@index([createdAt])
 }
 
-// MenuItem model - represents items within a menu
+// MenuItem model - represents items within a menu with hierarchical structure
 model MenuItem {
   id          String   @id @default(cuid())
   name        String   @db.VarChar(255)
-  description String?  @db.Text
-  price       Decimal  @db.Decimal(10, 2)
-  category    String   @db.VarChar(100)
-  isAvailable Boolean  @default(true)
-  sortOrder   Int      @default(0)
+  parentId    String?  // null for root items
+  menuId      String
+  order       Int      @default(0) // Order within same parent level
+  depth       Int      @default(0) // Current depth level (0 for root)
+  path        String   @default("") // Materialized path (e.g., "1.2.3")
+  hasChildren Boolean  @default(false) // Computed field for performance
+  isActive    Boolean  @default(true) // Soft delete support
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  // Foreign keys
-  menuId   String
-  parentId String?
-
   // Relations
   menu     Menu        @relation(fields: [menuId], references: [id], onDelete: Cascade)
-  parent   MenuItem?   @relation("MenuItemHierarchy", fields: [parentId], references: [id])
+  parent   MenuItem?   @relation("MenuItemHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
   children MenuItem[]  @relation("MenuItemHierarchy")
 
+  // Indexes for performance optimization
+  @@index([menuId, parentId]) // Fast parent-child queries
+  @@index([menuId, depth]) // Fast depth-based queries
+  @@index([path]) // Fast path-based queries for ancestors/descendants
+  @@index([menuId, order]) // Fast ordering queries
+  @@index([parentId, order]) // Fast sibling ordering
+  @@index([isActive])
   @@map("menu_items")
-  @@index([menuId])
-  @@index([parentId])
-  @@index([category])
-  @@index([isAvailable])
-  @@index([sortOrder])
 }
