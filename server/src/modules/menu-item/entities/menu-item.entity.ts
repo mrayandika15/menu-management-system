@@ -10,7 +10,7 @@ export class MenuItem {
   isActive!: boolean
   createdAt!: Date
   updatedAt!: Date
-  
+
   // Relations (optional for response mapping)
   children?: MenuItem[]
   parent?: MenuItem | null

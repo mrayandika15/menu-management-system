@@ -7,6 +7,6 @@ import { DatabaseModule } from '../../database/database.module'
   imports: [DatabaseModule],
   controllers: [MenuItemController],
   providers: [MenuItemService],
-  exports: [MenuItemService]
+  exports: [MenuItemService],
 })
 export class MenuItemModule {}

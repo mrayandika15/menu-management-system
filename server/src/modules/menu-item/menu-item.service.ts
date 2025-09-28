@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, ConflictException, BadRequestException } from '@nestjs/common'
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+  BadRequestException,
+} from '@nestjs/common'
 import { PrismaService } from '../../database/prisma.service'
 import { CreateMenuItemDto, UpdateMenuItemDto, MoveMenuItemDto } from './dto'
 import { MenuItem } from './entities/menu-item.entity'
@@ -12,7 +17,7 @@ export class MenuItemService {
 
     // Verify menu exists
     const menu = await this.prisma.menu.findUnique({
-      where: { id: menuId }
+      where: { id: menuId },
     })
     if (!menu) {
       throw new NotFoundException('Menu not found')
@@ -22,16 +27,18 @@ export class MenuItemService {
     let parent = null
     let depth = 0
     let path = ''
-    
+
     if (parentId) {
       parent = await this.prisma.menuItem.findUnique({
-        where: { id: parentId }
+        where: { id: parentId },
       })
       if (!parent) {
         throw new NotFoundException('Parent menu item not found')
       }
       if (parent.menuId !== menuId) {
-        throw new BadRequestException('Parent item must belong to the same menu')
+        throw new BadRequestException(
+          'Parent item must belong to the same menu',
+        )
       }
       depth = parent.depth + 1
       path = parent.path ? `${parent.path}.${parent.order}` : `${parent.order}`
@@ -42,22 +49,24 @@ export class MenuItemService {
       where: {
         name,
         menuId,
-        parentId: parentId || null
-      }
+        parentId: parentId || null,
+      },
     })
     if (existingItem) {
-      throw new ConflictException('Menu item with this name already exists at this level')
+      throw new ConflictException(
+        'Menu item with this name already exists at this level',
+      )
     }
 
     // Get next order number for this level
     const maxOrder = await this.prisma.menuItem.aggregate({
       where: {
         menuId,
-        parentId: parentId || null
+        parentId: parentId || null,
       },
       _max: {
-        order: true
-      }
+        order: true,
+      },
     })
     const order = (maxOrder._max?.order || 0) + 1
 
@@ -78,15 +87,15 @@ export class MenuItemService {
         depth,
         path,
         isActive,
-        hasChildren: false
-      }
+        hasChildren: false,
+      },
     })
 
     // Update parent's hasChildren flag if this is a child item
     if (parentId) {
       await this.prisma.menuItem.update({
         where: { id: parentId },
-        data: { hasChildren: true }
+        data: { hasChildren: true },
       })
     }
 
@@ -96,7 +105,7 @@ export class MenuItemService {
   async findAll(menuId: string, includeChildren = false): Promise<MenuItem[]> {
     const whereClause = {
       menuId,
-      isActive: true
+      isActive: true,
     }
 
     if (includeChildren) {
@@ -105,16 +114,16 @@ export class MenuItemService {
         include: {
           children: {
             where: { isActive: true },
-            orderBy: { order: 'asc' }
-          }
+            orderBy: { order: 'asc' },
+          },
         },
-        orderBy: { order: 'asc' }
+        orderBy: { order: 'asc' },
       })
     }
 
     return this.prisma.menuItem.findMany({
       where: whereClause,
-      orderBy: { order: 'asc' }
+      orderBy: { order: 'asc' },
     })
   }
 
@@ -123,15 +132,15 @@ export class MenuItemService {
       where: {
         menuId,
         parentId: null,
-        isActive: true
+        isActive: true,
       },
       include: {
         children: {
           where: { isActive: true },
-          orderBy: { order: 'asc' }
-        }
+          orderBy: { order: 'asc' },
+        },
       },
-      orderBy: { order: 'asc' }
+      orderBy: { order: 'asc' },
     })
   }
 
@@ -140,24 +149,26 @@ export class MenuItemService {
       where: {
         menuId,
         depth,
-        isActive: true
+        isActive: true,
       },
-      orderBy: { order: 'asc' }
+      orderBy: { order: 'asc' },
     })
   }
 
   async findOne(id: string, includeChildren = false): Promise<MenuItem> {
-    const includeClause = includeChildren ? {
-      children: {
-        where: { isActive: true },
-        orderBy: { order: 'asc' as const }
-      },
-      parent: true
-    } : {}
+    const includeClause = includeChildren
+      ? {
+          children: {
+            where: { isActive: true },
+            orderBy: { order: 'asc' as const },
+          },
+          parent: true,
+        }
+      : {}
 
     const menuItem = await this.prisma.menuItem.findUnique({
       where: { id },
-      include: includeClause
+      include: includeClause,
     })
 
     if (!menuItem) {
@@ -167,7 +178,10 @@ export class MenuItemService {
     return menuItem
   }
 
-  async update(id: string, updateMenuItemDto: UpdateMenuItemDto): Promise<MenuItem> {
+  async update(
+    id: string,
+    updateMenuItemDto: UpdateMenuItemDto,
+  ): Promise<MenuItem> {
     const existingItem = await this.findOne(id)
     const { name, parentId, isActive } = updateMenuItemDto
 
@@ -178,11 +192,13 @@ export class MenuItemService {
           name,
           menuId: existingItem.menuId,
           parentId: parentId !== undefined ? parentId : existingItem.parentId,
-          id: { not: id }
-        }
+          id: { not: id },
+        },
       })
       if (duplicateItem) {
-        throw new ConflictException('Menu item with this name already exists at this level')
+        throw new ConflictException(
+          'Menu item with this name already exists at this level',
+        )
       }
     }
 
@@ -195,8 +211,8 @@ export class MenuItemService {
       where: { id },
       data: {
         ...(name && { name }),
-        ...(isActive !== undefined && { isActive })
-      }
+        ...(isActive !== undefined && { isActive }),
+      },
     })
   }
 
@@ -216,15 +232,17 @@ export class MenuItemService {
 
     if (targetParentId) {
       targetParent = await this.prisma.menuItem.findUnique({
-        where: { id: targetParentId }
+        where: { id: targetParentId },
       })
       if (!targetParent) {
         throw new NotFoundException('Target parent not found')
       }
       if (targetParent.menuId !== item.menuId) {
-        throw new BadRequestException('Target parent must belong to the same menu')
+        throw new BadRequestException(
+          'Target parent must belong to the same menu',
+        )
       }
-      
+
       // Prevent circular references
       if (targetParent.path.startsWith(item.path)) {
         throw new BadRequestException('Cannot move item to its own descendant')
@@ -239,22 +257,30 @@ export class MenuItemService {
       const maxOrder = await this.prisma.menuItem.aggregate({
         where: {
           menuId: item.menuId,
-          parentId: targetParentId || null
+          parentId: targetParentId || null,
         },
-        _max: { order: true }
+        _max: { order: true },
       })
       finalOrder = (maxOrder._max?.order || 0) + 1
     }
 
     // Calculate new path
     if (targetParentId && targetParent) {
-      newPath = targetParent.path ? `${targetParent.path}.${finalOrder}` : `${finalOrder}`
+      newPath = targetParent.path
+        ? `${targetParent.path}.${finalOrder}`
+        : `${finalOrder}`
     } else {
       newPath = `${finalOrder}`
     }
 
     // Update the item and all its descendants
-    await this.updateItemHierarchy(id, targetParentId ?? null, finalOrder, newDepth, newPath)
+    await this.updateItemHierarchy(
+      id,
+      targetParentId ?? null,
+      finalOrder,
+      newDepth,
+      newPath,
+    )
 
     // Update old parent's hasChildren flag
     if (item.parentId) {
@@ -265,7 +291,7 @@ export class MenuItemService {
     if (targetParentId) {
       await this.prisma.menuItem.update({
         where: { id: targetParentId },
-        data: { hasChildren: true }
+        data: { hasChildren: true },
       })
     }
 
@@ -277,13 +303,13 @@ export class MenuItemService {
     newParentId: string | null,
     newOrder: number,
     newDepth: number,
-    newPath: string
+    newPath: string,
   ): Promise<void> {
     // Get all descendants
     const descendants = await this.prisma.menuItem.findMany({
       where: {
-        path: { startsWith: newPath }
-      }
+        path: { startsWith: newPath },
+      },
     })
 
     // Update the main item
@@ -293,8 +319,8 @@ export class MenuItemService {
         parentId: newParentId,
         order: newOrder,
         depth: newDepth,
-        path: newPath
-      }
+        path: newPath,
+      },
     })
 
     // Update all descendants' depth and path
@@ -304,15 +330,15 @@ export class MenuItemService {
         const newDescendantDepth = descendant.depth + depthDiff
         const newDescendantPath = descendant.path.replace(
           descendant.path.split('.')[0],
-          newPath
+          newPath,
         )
 
         await this.prisma.menuItem.update({
           where: { id: descendant.id },
           data: {
             depth: newDescendantDepth,
-            path: newDescendantPath
-          }
+            path: newDescendantPath,
+          },
         })
       }
     }
@@ -322,13 +348,13 @@ export class MenuItemService {
     const childrenCount = await this.prisma.menuItem.count({
       where: {
         parentId,
-        isActive: true
-      }
+        isActive: true,
+      },
     })
 
     await this.prisma.menuItem.update({
       where: { id: parentId },
-      data: { hasChildren: childrenCount > 0 }
+      data: { hasChildren: childrenCount > 0 },
     })
   }
 
@@ -339,22 +365,22 @@ export class MenuItemService {
     const descendants = await this.prisma.menuItem.findMany({
       where: {
         path: { startsWith: item.path },
-        id: { not: id }
-      }
+        id: { not: id },
+      },
     })
 
     // Delete all descendants first
     if (descendants.length > 0) {
       await this.prisma.menuItem.deleteMany({
         where: {
-          id: { in: descendants.map(d => d.id) }
-        }
+          id: { in: descendants.map(d => d.id) },
+        },
       })
     }
 
     // Delete the main item
     await this.prisma.menuItem.delete({
-      where: { id }
+      where: { id },
     })
 
     // Update parent's hasChildren flag
@@ -370,12 +396,14 @@ export class MenuItemService {
 
     let currentPath = ''
     for (let i = 0; i < pathParts.length - 1; i++) {
-      currentPath = currentPath ? `${currentPath}.${pathParts[i]}` : pathParts[i]
+      currentPath = currentPath
+        ? `${currentPath}.${pathParts[i]}`
+        : pathParts[i]
       const ancestor = await this.prisma.menuItem.findFirst({
         where: {
           path: currentPath,
-          menuId: item.menuId
-        }
+          menuId: item.menuId,
+        },
       })
       if (ancestor) {
         ancestors.push(ancestor)
@@ -387,27 +415,27 @@ export class MenuItemService {
 
   async getDescendants(id: string): Promise<MenuItem[]> {
     const item = await this.findOne(id)
-    
+
     return this.prisma.menuItem.findMany({
       where: {
         path: { startsWith: `${item.path}.` },
-        isActive: true
+        isActive: true,
       },
-      orderBy: { path: 'asc' }
+      orderBy: { path: 'asc' },
     })
   }
 
   async getSiblings(id: string): Promise<MenuItem[]> {
     const item = await this.findOne(id)
-    
+
     return this.prisma.menuItem.findMany({
       where: {
         parentId: item.parentId,
         menuId: item.menuId,
         id: { not: id },
-        isActive: true
+        isActive: true,
       },
-      orderBy: { order: 'asc' }
+      orderBy: { order: 'asc' },
     })
   }
 }
